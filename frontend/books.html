@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca - Lector EPUB</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="books.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar-brand">
+        <h1>📚 Lector EPUB</h1>
+      </div>
+      <div class="navbar-links">
+        <a href="index.html">Inicio</a>
+        <a href="books.html" class="active">Biblioteca</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <section class="library-section">
+        <h2>Mi Biblioteca</h2>
+        <p class="library-subtitle">Selecciona un libro para comenzar a leer</p>
+
+        <!-- Loading State -->
+        <div id="loading" class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Cargando libros...</p>
+        </div>
+
+        <!-- Books Grid -->
+        <div id="books-grid" class="books-grid" style="display: none;">
+          <!-- Los libros se cargarán aquí -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="empty-state" style="display: none;">
+          <div class="empty-icon">📚</div>
+          <h3>No hay libros disponibles</h3>
+          <p>Parece que no hay libros en la biblioteca. ¡Carga uno para comenzar!</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="error-state" class="error-state" style="display: none;">
+          <div class="error-icon">❌</div>
+          <h3>Error al cargar los libros</h3>
+          <p id="error-message"></p>
+          <button class="retry-button" onclick="loadBooks()">Reintentar</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Lector EPUB</h3>
+          <p>Plataforma de lectura digital moderna y accesible para todos.</p>
+        </div>
+        <div class="footer-section">
+          <h3>Enlaces</h3>
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="books.html">Biblioteca</a></li>
+            <li><a href="#">Contacto</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Lector EPUB. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="books.js"></script>
+</body>
+</html>

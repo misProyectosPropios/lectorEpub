@@ -52,11 +52,17 @@ const initializeDatabase = async () => {
     `);
 
     console.log('Base de datos inicializada correctamente');
-    process.exit(0);
   } catch (error) {
     console.error('Error inicializando base de datos:', error);
     process.exit(1);
   }
 };
 
-initializeDatabase();
+// Ejecutar si se llama como script
+if (require.main === module) {
+  initializeDatabase().then(() => {
+    process.exit(0);
+  });
+}
+
+module.exports = initializeDatabase;

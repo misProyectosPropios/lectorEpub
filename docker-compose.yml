@@ -1,0 +1,56 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: lector_epub_db
+    environment:
+      POSTGRES_USER: lector_user
+      POSTGRES_PASSWORD: lector_password
+      POSTGRES_DB: lector_epub
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lector_user -d lector_epub"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lector-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: lector_epub_backend
+    environment:
+      DATABASE_URL: postgresql://lector_user:lector_password@postgres:5432/lector_epub
+      NODE_ENV: production
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - lector-network
+    command: sh -c "npm run db:init && npm start"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: lector_epub_frontend
+    ports:
+      - "3001:3001"
+    depends_on:
+      - backend
+    networks:
+      - lector-network
+
+volumes:
+  postgres_data:
+
+networks:
+  lector-network:
+    driver: bridge
