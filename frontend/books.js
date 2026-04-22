@@ -10,6 +10,7 @@ let selectedBooks = new Set();
  */
 async function loadBooks() {
   try {
+    console.log("Hello world")
     // Mostrar loading
     document.getElementById('loading').style.display = 'flex';
     document.getElementById('books-grid').style.display = 'none';
@@ -24,12 +25,13 @@ async function loadBooks() {
     }
 
     books = await response.json();
-
+    console.log(books)
     // Ocultar loading
     document.getElementById('loading').style.display = 'none';
 
     // Mostrar resultados
     if (books.length === 0) {
+      
       document.getElementById('empty-state').style.display = 'flex';
     } else {
       renderBooks();
@@ -180,4 +182,34 @@ function getSelectedBooks() {
 // Cargar libros al iniciar la página
 document.addEventListener('DOMContentLoaded', () => {
   loadBooks();
+});
+
+// Handle upload button click
+document.getElementById('upload-button').addEventListener('click', () => {
+  const fileInput = document.getElementById('upload-book');
+  const file = fileInput.files[0];
+
+  if (!file) {
+    alert('Please select a file to upload.');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('book', file);
+
+  fetch('/api/upload', {
+    method: 'POST',
+    body: formData
+  })
+    .then(response => {
+      if (response.ok) {
+        alert('Book uploaded successfully!');
+      } else {
+        alert('Failed to upload book.');
+      }
+    })
+    .catch(error => {
+      console.error('Error uploading book:', error);
+      alert('An error occurred while uploading the book.');
+    });
 });

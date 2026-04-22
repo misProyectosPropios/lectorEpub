@@ -6,6 +6,7 @@
   <title>Biblioteca - Lector EPUB</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="books.css">
+  <link rel="icon" href="/books.png" type="image/x-icon">
 </head>
 <body>
   <!-- Navbar -->
@@ -52,6 +53,13 @@
           <h3>Error al cargar los libros</h3>
           <p id="error-message"></p>
           <button class="retry-button" onclick="loadBooks()">Reintentar</button>
+        </div>
+
+        <!-- Upload Button Section -->
+        <div id="upload-section">
+          <label for="upload-book">Upload Book:</label>
+          <input type="file" id="upload-book" name="upload-book" accept=".epub">
+          <button id="upload-button">Upload</button>
         </div>
       </section>
     </div>
