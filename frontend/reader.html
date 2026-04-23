@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lector EPUB - Leyendo</title>
+  <link rel="stylesheet" type="text/css" href="/styles.css">
+  <link rel="icon" href="/books.png" type="image/x-icon">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar-brand">
+        <h1>📚 Lector EPUB</h1>
+      </div>
+      <div class="navbar-links">
+        <a href="index.html">Inicio</a>
+        <a href="books.html" class="active">Biblioteca</a>
+      </div>
+    </div>
+  </nav>
+  <main class="main-content container">
+    <h2>Cargando Libro...</h2>
+    <p id="book-title-display"></p>
+    <div id="book-content"></div>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const pathSegments = window.location.pathname.split('/');
+      const bookTitleEncoded = pathSegments[pathSegments.length - 1];
+      const bookTitle = decodeURIComponent(bookTitleEncoded);
+      document.getElementById('book-title-display').textContent = `Título: ${bookTitle}`;
+
+      const fetchBookFile = async (name) => {
+        try {
+          const response = await fetch(`http://localhost:3000/api/books/name/${encodeURIComponent(name)}`);
+          
+          if (!response.ok) {
+            throw new Error('No se pudo encontrar el archivo del libro en el servidor.');
+          }
+
+          const blob = await response.blob();
+          console.log('EPUB recibido:', blob);
+          
+          // Éxito al cargar el archivo
+          document.getElementById('book-content').innerHTML = `
+            <div style="padding: 1rem; background-color: #d4edda; color: #155724; border-radius: 4px; border: 1px solid #c3e6cb; margin-top: 1rem;">
+              ✅ Archivo "${name}" cargado correctamente. Listo para lectura.
+            </div>
+          `;
+        } catch (error) {
+          console.error('Error:', error);
+          document.getElementById('book-content').innerHTML = `
+            <div style="padding: 1rem; background-color: #f8d7da; color: #721c24; border-radius: 4px; border: 1px solid #f5c6cb; margin-top: 1rem;">
+              ❌ Error: ${error.message}
+            </div>
+          `;
+        }
+      };
+
+      if (bookTitle) {
+        fetchBookFile(bookTitle);
+      }
+    });
+  </script>
+</body>
+</html>

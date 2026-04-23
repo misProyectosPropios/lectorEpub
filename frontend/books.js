@@ -94,6 +94,11 @@ function createBookCard(book) {
   const title = document.createElement('h3');
   title.className = 'book-title';
   title.textContent = book.title || 'Sin título';
+  title.style.cursor = 'pointer'; // Indicate it's clickable
+  title.onclick = () => {
+    // Navigate to a dedicated reader page using the book's title
+    window.location.href = `/books/${encodeURIComponent(book.title)}`;
+  };
   title.title = book.title;
 
   // Author

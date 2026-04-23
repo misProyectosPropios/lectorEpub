@@ -1,6 +1,7 @@
 {
   "rewrites": [
     { "source": "/books", "destination": "/books.html" },
-    { "source": "/books.png", "destination": "/books.png" }
+    { "source": "/books.png", "destination": "/books.png" },
+    { "source": "/books/:title", "destination": "/reader.html" }
   ]
 }

@@ -1,29 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
+const multer = require('multer');
 const BookController = require('../controllers/BookController');
 
+// Configuración de multer para almacenar libros en la carpeta /books
+const upload = multer({ dest: 'books/' });
 
 // GET /api/books - Obtener todos los libros
 router.get('/', BookController.getAllBooks);
 
 // GET /api/books/:id - Obtener un libro por ID
 router.get('/:id', BookController.getBookById);
-router.post('/', BookController.createBook);
-// POST /api/books - Crear un nuevo libro
-/*
-router.post('/', upload.single('book'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No file uploaded' });
-  }
 
-  // File uploaded successfully
-  res.status(200).json({
-    message: 'Book uploaded successfully',
-    file: req.file
-  });
-});
-*/
+// GET /api/books/name/:name - Obtener un libro por nombre (título)
+router.get('/name/:name', BookController.getBookByName);
+
+// POST /api/books - Crear un nuevo libro
+router.post('/', upload.single('book'), BookController.createBook);
+
 // PUT /api/books/:id - Actualizar un libro
 router.put('/:id', BookController.updateBook);
 
