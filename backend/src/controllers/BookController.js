@@ -29,6 +29,7 @@ class BookController {
 
   static async createBook(req, res) {
     try {
+      console.log("Llegado a create book")
       const { title, author, description, coverUrl, filePath } = req.body;
 
       if (!title) {

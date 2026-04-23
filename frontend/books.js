@@ -197,7 +197,7 @@ document.getElementById('upload-button').addEventListener('click', () => {
   const formData = new FormData();
   formData.append('book', file);
 
-  fetch('/api/upload', {
+  fetch(`${API_BASE_URL}/books`, {
     method: 'POST',
     body: formData
   })
