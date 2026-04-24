@@ -33,6 +33,37 @@ document.addEventListener('DOMContentLoaded', () => {
         flow: "scrolled-doc"
       });
 
+      // Configurar botones de navegación
+      const prevBtn = document.getElementById('prev-chapter');
+      const nextBtn = document.getElementById('next-chapter');
+
+      if (prevBtn && nextBtn) {
+        prevBtn.onclick = (e) => {
+          e.preventDefault();
+          rendition.prev();
+        };
+
+        nextBtn.onclick = (e) => {
+          e.preventDefault();
+          rendition.next();
+        };
+
+        // Actualizar estado de los botones (deshabilitar si estamos al inicio/final)
+        rendition.on('relocated', (location) => {
+          if (location.atStart) {
+            prevBtn.disabled = true;
+          } else {
+            prevBtn.disabled = false;
+          }
+
+          if (location.atEnd) {
+            nextBtn.disabled = true;
+          } else {
+            nextBtn.disabled = false;
+          }
+        });
+      }
+
       // Extraer y mostrar la portada en la parte superior del TOC
       book.coverUrl().then(url => {
         if (url) {

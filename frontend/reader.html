@@ -29,6 +29,23 @@
     #book-viewer { flex: 1; }
     .toc-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
     #book-cover-nav { width: 100%; border-radius: 4px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: block; }
+    .reader-controls {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
+    .nav-button {
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-weight: bold;
+    }
+    .nav-button:hover { background-color: #2980b9; }
+    .nav-button:disabled { background-color: #bdc3c7; cursor: not-allowed; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/jszip/dist/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
@@ -54,6 +71,10 @@
       </div>
       <div id="book-viewer">
         <div id="book-content" style="height: 70vh; border: 1px solid #dee2e6; border-radius: 8px; background: white; overflow: hidden; box-shadow: var(--shadow);"></div>
+        <div class="reader-controls">
+          <button id="prev-chapter" class="nav-button" disabled>« Anterior</button>
+          <button id="next-chapter" class="nav-button">Siguiente »</button>
+        </div>
       </div>
     </div>
   </main>
