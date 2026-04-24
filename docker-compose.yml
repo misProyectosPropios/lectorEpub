@@ -32,6 +32,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    volumes:
+      - ./books:/app/books
     networks:
       - lector-network
     command: sh -c "npm run db:init && npm start"
