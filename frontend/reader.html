@@ -46,6 +46,22 @@
     }
     .nav-button:hover { background-color: #2980b9; }
     .nav-button:disabled { background-color: #bdc3c7; cursor: not-allowed; }
+    .font-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: white;
+      padding: 5px 10px;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    .font-control select {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-weight: 500;
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/jszip/dist/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
@@ -73,6 +89,17 @@
         <div id="book-content" style="height: 70vh; border: 1px solid #dee2e6; border-radius: 8px; background: white; overflow: hidden; box-shadow: var(--shadow);"></div>
         <div class="reader-controls">
           <button id="prev-chapter" class="nav-button" disabled>« Anterior</button>
+          <div class="font-control">
+            <label for="font-family-select">Tipografía:</label>
+            <select id="font-family-select">
+              <option value="Default">Original</option>
+              <option value="'Helvetica', sans-serif">Helvetica</option>
+              <option value="'Georgia', serif">Georgia</option>
+              <option value="'Times New Roman', serif">Times New Roman</option>
+              <option value="'Verdana', sans-serif">Verdana</option>
+              <option value="'Courier New', monospace">Courier New</option>
+            </select>
+          </div>
           <button id="next-chapter" class="nav-button">Siguiente »</button>
         </div>
       </div>

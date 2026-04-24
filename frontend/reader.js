@@ -64,6 +64,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
 
+      // Configurar selector de fuentes
+      const fontSelect = document.getElementById('font-family-select');
+      if (fontSelect) {
+        fontSelect.onchange = (e) => {
+          console.log(rendition)
+          const fontValue = e.target.value;
+
+          if (fontValue === 'Default') {
+          rendition.themes.select(null); // vuelve al default del EPUB
+          } else {
+            rendition.themes.register("custom-font", {
+            "body, p, div, span, *": {
+              "font-family": `${fontValue} !important`
+            }
+          });
+
+          rendition.themes.select("custom-font");
+          }
+        };
+      }
+
       // Extraer y mostrar la portada en la parte superior del TOC
       book.coverUrl().then(url => {
         if (url) {
