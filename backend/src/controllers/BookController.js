@@ -124,6 +124,27 @@ class BookController {
       res.status(500).json({ error: error.message });
     }
   }
+
+  static async clearLibrary(req, res) {
+    try {
+      logInfo("Iniciando limpieza total de la biblioteca...");
+
+      // 1. Limpiar base de datos (books, chapters, metadata)
+      await Book.deleteAll();
+
+      // 2. Eliminar archivos físicos en /books
+      const booksDir = path.resolve('books');
+      const files = await fs.readdir(booksDir);
+      for (const file of files) {
+        await fs.unlink(path.join(booksDir, file));
+      }
+
+      res.json({ message: 'Biblioteca y archivos eliminados correctamente' });
+    } catch (error) {
+      console.error('Error al limpiar la biblioteca:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
 }
 
 module.exports = BookController;

@@ -25,4 +25,7 @@ router.put('/:id', BookController.updateBook);
 // DELETE /api/books/:id - Eliminar un libro
 router.delete('/:id', BookController.deleteBook);
 
+// DELETE /api/books - Eliminar todos los libros y limpiar archivos
+router.delete('/', BookController.clearLibrary);
+
 module.exports = router;

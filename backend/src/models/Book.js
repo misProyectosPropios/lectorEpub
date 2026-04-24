@@ -54,6 +54,10 @@ class Book {
     const result = await pool.query('DELETE FROM books WHERE id = $1 RETURNING id', [id]);
     return result.rows[0];
   }
+
+  static async deleteAll() {
+    await pool.query('TRUNCATE books RESTART IDENTITY CASCADE');
+  }
 }
 
 module.exports = Book;
