@@ -30,7 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const rendition = book.renderTo("book-content", {
         width: "100%",
         height: "100%",
-        flow: "scrolled-doc"
+        flow: "scrolled-doc",
+        sandbox: "allow-same-origin allow-scripts allow-popups allow-forms"
       });
 
       // Configurar botones de navegación
@@ -66,24 +67,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Configurar selector de fuentes
       const fontSelect = document.getElementById('font-family-select');
-      if (fontSelect) {
-        fontSelect.onchange = (e) => {
-          console.log(rendition)
-          const fontValue = e.target.value;
+      const fontSizeSelect = document.getElementById('font-size-select');
 
-          if (fontValue === 'Default') {
-          rendition.themes.select(null); // vuelve al default del EPUB
-          } else {
-            rendition.themes.register("custom-font", {
-            "body, p, div, span, *": {
-              "font-family": `${fontValue} !important`
+      const applyStylesToIframes = () => {
+        const fontValue = fontSelect ? fontSelect.value : 'Default';
+        const fontSizeValue = fontSizeSelect ? fontSizeSelect.value : '100%';
+        
+        const iframes = document.querySelectorAll('#book-content iframe');
+        
+        iframes.forEach(iframe => {
+          try {
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            if (iframeDoc && iframeDoc.body) {
+              // Aplicar tipografía
+              iframeDoc.body.style.setProperty('font-family', fontValue === 'Default' ? '' : fontValue, 'important');
+              // Aplicar tamaño de fuente
+              iframeDoc.body.style.setProperty('font-size', fontSizeValue, 'important');
             }
-          });
-
-          rendition.themes.select("custom-font");
+          } catch (err) {
+            console.warn('No se pudo acceder al iframe para aplicar estilos:', err);
           }
-        };
-      }
+        });
+      };
+
+      if (fontSelect) fontSelect.onchange = applyStylesToIframes;
+      if (fontSizeSelect) fontSizeSelect.onchange = applyStylesToIframes;
+
+      // Re-aplicar estilos cada vez que se renderice una sección o capítulo nuevo
+      rendition.on('rendered', applyStylesToIframes);
 
       // Extraer y mostrar la portada en la parte superior del TOC
       book.coverUrl().then(url => {
