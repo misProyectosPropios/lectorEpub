@@ -25,8 +25,8 @@
     #toc-sidebar ul { list-style: none; padding-left: 15px; }
     #toc-sidebar li { margin-bottom: 8px; }
     #toc-sidebar a { text-decoration: none; color: #3498db; font-size: 0.9rem; transition: color 0.2s; }
-    #toc-sidebar a:hover { color: #2c3e50; text-decoration: underline; }
-    #book-viewer { flex: 1; }
+    #toc-sidebar a:hover { color: #2c3e50; text-decoration: underline; } /* Existing style */
+    #book-viewer { flex: 1; position: relative; } /* Added position: relative for ruler positioning */
     .toc-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
     #book-cover-nav { width: 100%; border-radius: 4px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: block; }
     .reader-controls {
@@ -62,6 +62,47 @@
       cursor: pointer;
       font-weight: 500;
     }
+
+    /* Reading Ruler Styles */
+    #reading-ruler {
+      position: absolute;
+      left: 0;
+      width: 100%; /* Will be adjusted by JS to match book-content width */
+      height: 30px; /* Height of the transparent reading window */
+      background: transparent; /* The window itself is transparent */
+      pointer-events: none; /* By default, don't block clicks on content */
+      z-index: 10; /* Below UI elements like navbar */
+      cursor: grab; /* When active, allow grabbing */
+      top: 0; /* Initial position */
+      box-sizing: border-box;
+      display: none; /* Hidden by default */
+    }
+
+    #reading-ruler.active {
+      pointer-events: auto; /* Allow interaction when active */
+    }
+
+    /* Opaque top part */
+    #reading-ruler::before {
+      content: '';
+      position: absolute;
+      top: -20px; /* Fixed height for a subtle effect */
+      left: 0;
+      width: 100%;
+      height: 20px; 
+      background-color: rgba(128, 128, 128, 0.7); /* Greyish opaque */
+    }
+
+    /* Opaque bottom part */
+    #reading-ruler::after {
+      content: '';
+      position: absolute;
+      bottom: -20px; /* Fixed height for a subtle effect */
+      left: 0;
+      width: 100%;
+      height: 20px;
+      background-color: rgba(128, 128, 128, 0.7); /* Greyish opaque */
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/jszip/dist/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
@@ -89,6 +130,7 @@
         <div id="book-content" style="height: 70vh; border: 1px solid #dee2e6; border-radius: 8px; background: white; overflow: hidden; box-shadow: var(--shadow);"></div>
         <div class="reader-controls">
           <button id="prev-chapter" class="nav-button" disabled>« Anterior</button>
+
           <div class="font-control">
             <label for="font-family-select">Tipografía:</label>
             <select id="font-family-select">
@@ -120,6 +162,10 @@
               <option value="solarized">Solarizado</option>
               <option value="pinkish">Rosado</option>
             </select>
+          </div>
+          <div class="font-control">
+            <input type="checkbox" id="reading-ruler-toggle">
+            <label for="reading-ruler-toggle">Regla de lectura</label>
           </div>
           <button id="next-chapter" class="nav-button">Siguiente »</button>
         </div>

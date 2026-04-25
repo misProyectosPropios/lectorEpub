@@ -110,8 +110,72 @@ const fetchBookFile = async (name) => {
     if (fontSizeSelect) fontSizeSelect.onchange = applyStylesToIframes;
     if (themeSelect) themeSelect.onchange = applyStylesToIframes;
 
+    // Configurar regla de lectura
+    const readingRulerToggle = document.getElementById('reading-ruler-toggle');
+    const bookViewer = document.getElementById('book-viewer');
+    const bookContent = document.getElementById('book-content');
+    
+    // Crear el elemento de la regla si no existe
+    let readingRuler = document.getElementById('reading-ruler');
+    if (!readingRuler) {
+      readingRuler = document.createElement('div');
+      readingRuler.id = 'reading-ruler';
+      bookViewer.appendChild(readingRuler);
+    }
+
+    let isDragging = false;
+    let startY, startTop;
+
+    const onMouseMove = (e) => {
+      if (!isDragging) return;
+      const deltaY = e.clientY - startY;
+      let newTop = startTop + deltaY;
+
+      // Límites: considerando los 20px de los bordes opacos
+      const padding = 20; 
+      const minTop = bookContent.offsetTop + padding;
+      const maxTop = bookContent.offsetTop + bookContent.offsetHeight - readingRuler.offsetHeight - padding;
+
+      newTop = Math.max(minTop, Math.min(newTop, maxTop));
+      readingRuler.style.top = `${newTop}px`;
+    };
+
+    const onMouseUp = () => {
+      isDragging = false;
+      readingRuler.style.cursor = 'grab';
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    readingRuler.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startY = e.clientY;
+      startTop = readingRuler.offsetTop;
+      readingRuler.style.cursor = 'grabbing';
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+
+    readingRulerToggle.addEventListener('change', () => {
+      if (readingRulerToggle.checked) {
+        readingRuler.style.display = 'block';
+        readingRuler.classList.add('active');
+        readingRuler.style.width = `${bookContent.offsetWidth}px`;
+        // Posición inicial centrada
+        readingRuler.style.top = `${bookContent.offsetTop + (bookContent.offsetHeight / 2) - 15}px`;
+      } else {
+        readingRuler.style.display = 'none';
+        readingRuler.classList.remove('active');
+      }
+    });
+
     // Re-aplicar estilos cada vez que se renderice una sección o capítulo nuevo
-    rendition.on('rendered', applyStylesToIframes);
+    rendition.on('rendered', () => {
+      applyStylesToIframes();
+      if (readingRulerToggle.checked) {
+        readingRuler.style.width = `${bookContent.offsetWidth}px`;
+      }
+    });
 
     // Extraer y mostrar la portada en la parte superior del TOC
     book.coverUrl().then(url => {
